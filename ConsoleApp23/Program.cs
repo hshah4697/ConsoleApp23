@@ -127,6 +127,41 @@ namespace SnakeGame//game name Snakegame//
                 return obstacle;
             }
         }
+        private static Position foodposition(Random randomNumberscreater, List<Position> problems, Queue<Position> snakeobjects)
+        {
+            Position food;
+            food = NewMethod(randomNumberscreater, problems);
+            return food;
+            // internal method//
+            static Position NewMethod(Random randomNumberscreater, List<Position> problems)
+            {
+                Position food;
+                // do-while loop for new position of food//
+                do
+                {
+                    food = new Position(randomNumberscreater.Next(0, System.Console.WindowHeight),
+                        randomNumberscreater.Next(0, System.Console.WindowWidth));
+                }
+                while (problems.Contains(food) || problems.Contains(food));
+                return food;
+            }
+        }
+        private static void NewMethod7(ref int lastFoodTime, int foodDissapearTime, ref int negativePoints, Random randomNumbersGenerator, List<Position> obstacles, Queue<Position> snakeElements, ref Position food)
+        {
+            if (System.Environment.TickCount - lastFoodTime >= foodDissapearTime)
+            {
+                negativePoints = negativePoints + 50;
+                System.Console.SetCursorPosition(food.col, food.row);
+                System.Console.Write(" ");
+                do
+                {
+                    food = new Position(randomNumbersGenerator.Next(0, System.Console.WindowHeight),
+                        randomNumbersGenerator.Next(0, System.Console.WindowWidth));
+                }
+                while (snakeElements.Contains(food) || obstacles.Contains(food));
+                lastFoodTime = System.Environment.TickCount;
+            }
+        }
 
     }
             
