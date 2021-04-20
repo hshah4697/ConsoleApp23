@@ -181,5 +181,119 @@ namespace SnakeGame//game name Snakegame//
                 System.Console.Write("*");
             }
         }
+        // snake movement direction//
+        private static void movement(byte right, byte left, byte down, byte up, ref int endFoodTime, int foodexitTime, ref int reverseend, ref double sleepTime, ref int way, Random randomNumberscreater, List<Position> problems, Queue<Position> snakeobjects, ref Position food)
+        {
+            NewMethod(right, left, down, up, ref endFoodTime, foodexitTime, ref reverseend, ref sleepTime, ref way, randomNumberscreater, problems, snakeobjects, ref food);
+
+            static void NewMethod(byte right, byte left, byte down, byte up, ref int endFoodTime, int foodexitTime, ref int reverseend, ref double sleepTime, ref int way, Random randomNumberscreater, List<Position> problems, Queue<Position> snakeobjects, ref Position food)
+            {
+                while (true)
+                {
+                    reverseend++;
+                    // nested if loop//
+                    if (System.Console.KeyAvailable)
+                    {
+                        System.ConsoleKeyInfo userInput = System.Console.ReadKey();
+                        if (userInput.Key == System.ConsoleKey.LeftArrow)
+                        {
+                            if (way != right) way = left;//lest move//
+                        }
+                        if (userInput.Key == System.ConsoleKey.RightArrow)
+                        {
+                            if (way != left) way = right;//right move//
+                        }
+                        if (userInput.Key == System.ConsoleKey.UpArrow)
+                        {
+                            if (way != down) way = up; //upside move//
+                        }
+                        if (userInput.Key == System.ConsoleKey.DownArrow)
+                        {
+                            if (way != up) way = down;// downside move//
+                        }
+                    }
+                    //head poition direction//
+                    Position snakeHead = snakeobjects.Last();
+
+                    Position[] directions = new Position[]
+                    {
+                new Position(0, 1), // right
+                new Position(0, -1), // left
+                new Position(1, 0), // down
+                new Position(-1, 0), // up
+                    };
+                    Position nextDirection = directions[way];
+
+                    Position snakeNewHead = new Position(snakeHead.row + nextDirection.row,
+                        snakeHead.col + nextDirection.col);
+
+                    if (snakeNewHead.col < 0) snakeNewHead.col = System.Console.WindowWidth - 1;
+                    if (snakeNewHead.row < 0) snakeNewHead.row = System.Console.WindowHeight - 1;
+                    if (snakeNewHead.row >= System.Console.WindowHeight) snakeNewHead.row = 0;
+                    if (snakeNewHead.col >= System.Console.WindowWidth) snakeNewHead.col = 0;
+
+                    if (snakeobjects.Contains(snakeNewHead) || problems.Contains(snakeNewHead))
+                    {
+                        System.Console.SetCursorPosition(0, 0);
+                        System.Console.ForegroundColor = System.ConsoleColor.Red;
+                        //notation for game ending after snake touch the #//
+                        System.Console.WriteLine("Game over!");
+                        int userPoints = (snakeobjects.Count - 6) * 100 - reverseend;
+                        //if (userPoints < 0) userPoints = 0;
+                        userPoints = System.Math.Max(userPoints, 0);
+                        System.Console.WriteLine("Your points are: {0}", userPoints);
+                        return;
+                    }
+                    // cursor position//
+                    System.Console.SetCursorPosition(snakeHead.col, snakeHead.row);
+                    System.Console.ForegroundColor = System.ConsoleColor.DarkGray;
+                    System.Console.Write("*");
+
+                    snakeobjects.Enqueue(snakeNewHead);
+                    System.Console.SetCursorPosition(snakeNewHead.col, snakeNewHead.row);
+                    System.Console.ForegroundColor = System.ConsoleColor.Gray;
+                    if (way == right) System.Console.Write(">");
+                    if (way == left) System.Console.Write("<");
+                    if (way == up) System.Console.Write("^");
+                    if (way == down) System.Console.Write("v");
+
+
+                    if (snakeNewHead.col != food.col || snakeNewHead.row != food.row)
+                    {
+                        // moving...//
+                        Position last = snakeobjects.Dequeue();
+                        System.Console.SetCursorPosition(last.col, last.row);
+                        System.Console.Write(" ");
+                    }
+                    else
+                    {
+                        // feeding the snake//
+                        food = foodposition(randomNumberscreater, problems, snakeobjects);
+                        endFoodTime = System.Environment.TickCount;
+                        System.Console.SetCursorPosition(food.col, food.row);
+                        System.Console.ForegroundColor = System.ConsoleColor.Red;
+                        System.Console.Write("$");
+                        sleepTime--;
+
+                        Position obstacle = new Position();
+                        obstacle = problemofobject(randomNumberscreater, problems, snakeobjects, food);
+                        problems.Add(obstacle);
+                        System.Console.SetCursorPosition(obstacle.col, obstacle.row);
+                        System.Console.ForegroundColor = System.ConsoleColor.Cyan;
+                        System.Console.Write("=");
+                    }
+
+                    NewMethod7(ref endFoodTime, foodexitTime, ref reverseend, randomNumberscreater, problems, snakeobjects, ref food);
+
+                    System.Console.SetCursorPosition(food.col, food.row);
+                    System.Console.ForegroundColor = System.ConsoleColor.Red;
+                    System.Console.Write("$");
+
+                    sleepTime -= 0.02;
+
+                    Thread.Sleep((int)sleepTime);
+                }
+            }
+        }
     }
             
