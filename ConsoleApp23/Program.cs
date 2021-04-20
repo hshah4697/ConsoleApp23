@@ -47,14 +47,28 @@ namespace SnakeGame//game name Snakegame//
             varposition2(out endlunchTime, out NumbersCreater);
             List<Position> problems = positionarrangement();
             problemposistion(problems);
+
             Queue<Position> snakeobjects;
             Position food;
             NewMethod3(NumbersCreater, problems, out snakeobjects, out food);
             varposition(snakeobjects);
 
             movement(right, left, down, up, ref endlunchTime, foodexitTime, ref reverseend, ref sleepTime, ref way, NumbersCreater, problems, snakeobjects, ref food);
-
         }
+        //method for position arrangement//
+        private static List<Position> positionarrangement()
+        {
+            //position stroed in list//
+            return new List<Position>()
+            {
+                new Position(11, 11),
+                new Position(12, 25),
+                new Position(5, 9),
+                new Position(20, 20),
+                new Position(6, 10),
+            };
+        }
+        // method for randomnumber call//
         private static Random returnnumber()
         {
             return new System.Random();
@@ -72,11 +86,12 @@ namespace SnakeGame//game name Snakegame//
             {
                 snakeobjects.Enqueue(new Position(0, j));
             }
-            
+            food = foodmethod(randomNumberscreater, problems, snakeobjects);
             System.Console.SetCursorPosition(food.col, food.row);// cursor position//
             System.Console.ForegroundColor = System.ConsoleColor.Red;// provide color to food//
             System.Console.Write("$");
         }
+        //change food position//
         private static Position foodmethod(Random randomNumberscreater, List<Position> problems, Queue<Position> snakeobjects)
         {
             Position food;
@@ -87,99 +102,6 @@ namespace SnakeGame//game name Snakegame//
             }
             while (snakeobjects.Contains(food) || problems.Contains(food));
             return food;
-        }
-        private static List<Position> positionarrangement()
-        {
-            //position stroed in list//
-            return new List<Position>()
-            {
-                new Position(11, 11),
-                new Position(12, 25),
-                new Position(5, 9),
-                new Position(20, 20),
-                new Position(6, 10),
-            };
-        }
-        private static void varposition2(out int lastFoodTime, out Random randomNumberscreater)
-        {
-            randomNumberscreater = returnnumber();
-            System.Console.BufferHeight = System.Console.WindowHeight;
-            lastFoodTime = System.Environment.TickCount;
-        }
-        // obstacles position method//
-        private static Position problemofobject(Random randomNumberscreater, List<Position> problems, Queue<Position> snakeobjects, Position food)
-        {
-            Position obstacle;
-            obstacle = NewMethod(randomNumberscreater, problems, snakeobjects, food);
-            return obstacle;
-
-            static Position NewMethod(Random randomNumberscreater, List<Position> problems, Queue<Position> snakeobjects, Position food)
-            {
-                Position obstacle;
-                do
-                {
-                    obstacle = new Position(randomNumberscreater.Next(0, System.Console.WindowHeight),
-                        randomNumberscreater.Next(0, System.Console.WindowWidth));
-                }
-                while (snakeobjects.Contains(obstacle) ||
-      problems.Contains(obstacle) ||
-      (food.row != obstacle.row && food.col != obstacle.row));
-                return obstacle;
-            }
-        }
-        private static Position foodposition(Random randomNumberscreater, List<Position> problems, Queue<Position> snakeobjects)
-        {
-            Position food;
-            food = NewMethod(randomNumberscreater, problems);
-            return food;
-            // internal method//
-            static Position NewMethod(Random randomNumberscreater, List<Position> problems)
-            {
-                Position food;
-                // do-while loop for new position of food//
-                do
-                {
-                    food = new Position(randomNumberscreater.Next(0, System.Console.WindowHeight),
-                        randomNumberscreater.Next(0, System.Console.WindowWidth));
-                }
-                while (problems.Contains(food) || problems.Contains(food));
-                return food;
-            }
-        }
-        private static void NewMethod7(ref int lastFoodTime, int foodDissapearTime, ref int negativePoints, Random randomNumbersGenerator, List<Position> obstacles, Queue<Position> snakeElements, ref Position food)
-        {
-            if (System.Environment.TickCount - lastFoodTime >= foodDissapearTime)
-            {
-                negativePoints = negativePoints + 50;
-                System.Console.SetCursorPosition(food.col, food.row);
-                System.Console.Write(" ");
-                do
-                {
-                    food = new Position(randomNumbersGenerator.Next(0, System.Console.WindowHeight),
-                        randomNumbersGenerator.Next(0, System.Console.WindowWidth));
-                }
-                while (snakeElements.Contains(food) || obstacles.Contains(food));
-                lastFoodTime = System.Environment.TickCount;
-            }
-        }
-        //method for # problems position in game//
-        private static void problemposistion(List<Position> problems)
-        {
-            foreach (Position obstacle in problems)
-            {
-                System.Console.ForegroundColor = System.ConsoleColor.Cyan;
-                System.Console.SetCursorPosition(obstacle.col, obstacle.row);
-                System.Console.Write("#");
-            }
-        }
-        private static void varposition(Queue<Position> snakeobjects)
-        {
-            foreach (var position in snakeobjects)
-            {
-                System.Console.SetCursorPosition(position.col, position.row);
-                System.Console.ForegroundColor = System.ConsoleColor.DarkGray;
-                System.Console.Write("*");
-            }
         }
         // snake movement direction//
         private static void movement(byte right, byte left, byte down, byte up, ref int endFoodTime, int foodexitTime, ref int reverseend, ref double sleepTime, ref int way, Random randomNumberscreater, List<Position> problems, Queue<Position> snakeobjects, ref Position food)
@@ -295,5 +217,87 @@ namespace SnakeGame//game name Snakegame//
                 }
             }
         }
+        // obstacles position method//
+        private static Position problemofobject(Random randomNumberscreater, List<Position> problems, Queue<Position> snakeobjects, Position food)
+        {
+            Position obstacle;
+            obstacle = NewMethod(randomNumberscreater, problems, snakeobjects, food);
+            return obstacle;
+
+            static Position NewMethod(Random randomNumberscreater, List<Position> problems, Queue<Position> snakeobjects, Position food)
+            {
+                Position obstacle;
+                do
+                {
+                    obstacle = new Position(randomNumberscreater.Next(0, System.Console.WindowHeight),
+                        randomNumberscreater.Next(0, System.Console.WindowWidth));
+                }
+                while (snakeobjects.Contains(obstacle) ||
+      problems.Contains(obstacle) ||
+      (food.row != obstacle.row && food.col != obstacle.row));
+                return obstacle;
+            }
+        }
+        private static Position foodposition(Random randomNumberscreater, List<Position> problems, Queue<Position> snakeobjects)
+        {
+            Position food;
+            food = NewMethod(randomNumberscreater, problems);
+            return food;
+            // internal method//
+            static Position NewMethod(Random randomNumberscreater, List<Position> problems)
+            {
+                Position food;
+                // do-while loop for new position of food//
+                do
+                {
+                    food = new Position(randomNumberscreater.Next(0, System.Console.WindowHeight),
+                        randomNumberscreater.Next(0, System.Console.WindowWidth));
+                }
+                while (problems.Contains(food) || problems.Contains(food));
+                return food;
+            }
+        }
+        private static void NewMethod7(ref int lastFoodTime, int foodDissapearTime, ref int negativePoints, Random randomNumbersGenerator, List<Position> obstacles, Queue<Position> snakeElements, ref Position food)
+        {
+            if (System.Environment.TickCount - lastFoodTime >= foodDissapearTime)
+            {
+                negativePoints = negativePoints + 50;
+                System.Console.SetCursorPosition(food.col, food.row);
+                System.Console.Write(" ");
+                do
+                {
+                    food = new Position(randomNumbersGenerator.Next(0, System.Console.WindowHeight),
+                        randomNumbersGenerator.Next(0, System.Console.WindowWidth));
+                }
+                while (snakeElements.Contains(food) || obstacles.Contains(food));
+                lastFoodTime = System.Environment.TickCount;
+            }
+        }
+        //method for # problems position in game//
+        private static void problemposistion(List<Position> problems)
+        {
+            foreach (Position obstacle in problems)
+            {
+                System.Console.ForegroundColor = System.ConsoleColor.Cyan;
+                System.Console.SetCursorPosition(obstacle.col, obstacle.row);
+                System.Console.Write("#");
+            }
+        }
+        private static void varposition(Queue<Position> snakeobjects)
+        {
+            foreach (var position in snakeobjects)
+            {
+                System.Console.SetCursorPosition(position.col, position.row);
+                System.Console.ForegroundColor = System.ConsoleColor.DarkGray;
+                System.Console.Write("*");
+            }
+        }
+        private static void varposition2(out int lastFoodTime, out Random randomNumberscreater)
+        {
+            randomNumberscreater = returnnumber();
+            System.Console.BufferHeight = System.Console.WindowHeight;
+            lastFoodTime = System.Environment.TickCount;
+        }
+
     }
-            
+}
