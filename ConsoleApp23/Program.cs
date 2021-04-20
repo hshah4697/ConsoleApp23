@@ -162,6 +162,24 @@ namespace SnakeGame//game name Snakegame//
                 lastFoodTime = System.Environment.TickCount;
             }
         }
-
+        //method for # problems position in game//
+        private static void problemposistion(List<Position> problems)
+        {
+            foreach (Position obstacle in problems)
+            {
+                System.Console.ForegroundColor = System.ConsoleColor.Cyan;
+                System.Console.SetCursorPosition(obstacle.col, obstacle.row);
+                System.Console.Write("#");
+            }
+        }
+        private static void varposition(Queue<Position> snakeobjects)
+        {
+            foreach (var position in snakeobjects)
+            {
+                System.Console.SetCursorPosition(position.col, position.row);
+                System.Console.ForegroundColor = System.ConsoleColor.DarkGray;
+                System.Console.Write("*");
+            }
+        }
     }
             
