@@ -45,7 +45,45 @@ namespace SnakeGame//game name Snakegame//
             assignment(out right, out left, out down, out up, out endlunchTime, out foodexitTime, out reverseend, out sleepTime, out way);
             Random NumbersCreater;
             varposition2(out endlunchTime, out NumbersCreater);
+            List<Position> problems = positionarrangement();
+            problemposistion(problems);
+            Queue<Position> snakeobjects;
+            Position food;
+
+        }
+        private static Random returnnumber()
+        {
+            return new System.Random();
+        }
+        private static Queue<Position> queuerange()
+        {
+            return new Queue<Position>();
+        }
+        //method for snakefood and its notation//
+        private static void NewMethod3(Random randomNumberscreater, List<Position> problems, out Queue<Position> snakeobjects, out Position food)
+        {
+            snakeobjects = queuerange();
+            // for loop for position of food//
+            for (int j = 0; j <= 5; j++)
+            {
+                snakeobjects.Enqueue(new Position(0, j));
+            }
             
+            System.Console.SetCursorPosition(food.col, food.row);// cursor position//
+            System.Console.ForegroundColor = System.ConsoleColor.Red;// provide color to food//
+            System.Console.Write("$");
+        }
+        private static List<Position> positionarrangement()
+        {
+            //position stroed in list//
+            return new List<Position>()
+            {
+                new Position(11, 11),
+                new Position(12, 25),
+                new Position(5, 9),
+                new Position(20, 20),
+                new Position(6, 10),
+            };
         }
         private static void varposition2(out int lastFoodTime, out Random randomNumberscreater)
         {
